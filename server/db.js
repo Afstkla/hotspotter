@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS networks (
   password TEXT,
   notes TEXT,
   venue_name TEXT,
-  status TEXT NOT NULL DEFAULT 'active',
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','removed')),
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
 );

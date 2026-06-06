@@ -41,6 +41,11 @@ describe('GET /api/networks', () => {
     expect(res.status).toBe(400);
   });
 
+  it('rejects empty or out-of-range lat/lon', async () => {
+    expect((await request(app).get('/api/networks?lat=&lon=4.89')).status).toBe(400);
+    expect((await request(app).get('/api/networks?lat=200&lon=4.89')).status).toBe(400);
+  });
+
   it('returns nearby networks', async () => {
     await request(app).post('/api/networks').send(payload);
     const res = await request(app).get('/api/networks?lat=52.3731&lon=4.8922&radius=1000');

@@ -16,11 +16,16 @@ export function createApp(db) {
   });
 
   app.get('/api/networks', (req, res) => {
-    const lat = Number(req.query.lat);
-    const lon = Number(req.query.lon);
+    const { lat: latRaw, lon: lonRaw } = req.query;
+    const lat = Number(latRaw);
+    const lon = Number(lonRaw);
     const radius = Number(req.query.radius ?? 1000);
-    if (Number.isNaN(lat) || Number.isNaN(lon)) {
-      return res.status(400).json({ error: 'lat and lon required' });
+    if (
+      latRaw == null || latRaw === '' || lonRaw == null || lonRaw === '' ||
+      Number.isNaN(lat) || Number.isNaN(lon) ||
+      lat < -90 || lat > 90 || lon < -180 || lon > 180
+    ) {
+      return res.status(400).json({ error: 'valid lat and lon required' });
     }
     res.json(findNearby(db, lat, lon, Number.isNaN(radius) ? 1000 : radius));
   });
