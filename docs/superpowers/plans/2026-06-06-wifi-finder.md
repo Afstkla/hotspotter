@@ -902,7 +902,7 @@ git commit -m "feat: server bootstrap serving api and static client"
 - [ ] **Step 3: Create `client/vite.config.ts`**
 
 ```ts
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
