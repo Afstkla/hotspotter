@@ -32,8 +32,8 @@ describe('addNetwork + getById', () => {
 
 describe('findNearby', () => {
   it('returns networks within radius sorted by distance', () => {
-    const near = addNetwork(db, { ...base, ssid: 'Near', locations: [{ lat: 52.3731, lon: 4.8922 }] });
-    const far = addNetwork(db, { ...base, ssid: 'Far', locations: [{ lat: 52.3900, lon: 4.8922 }] });
+    addNetwork(db, { ...base, ssid: 'Near', locations: [{ lat: 52.3731, lon: 4.8922 }] });
+    addNetwork(db, { ...base, ssid: 'Far', locations: [{ lat: 52.3900, lon: 4.8922 }] });
     addNetwork(db, { ...base, ssid: 'WayFar', locations: [{ lat: 53.0, lon: 5.0 }] });
 
     const results = findNearby(db, 52.3731, 4.8922, 2000);
