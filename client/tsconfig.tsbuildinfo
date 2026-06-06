@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/api.ts","./src/main.tsx","./src/platform.ts","./src/components/aboutpage.tsx","./src/components/addpage.tsx","./src/components/findpage.tsx","./src/components/mapview.tsx","./src/components/networkcard.tsx","./src/hooks/usegeolocation.ts","./src/test/networkcard.test.tsx","./src/test/setup.ts"],"version":"5.9.3"}

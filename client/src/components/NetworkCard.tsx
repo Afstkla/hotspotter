@@ -37,8 +37,12 @@ export default function NetworkCard({ network }: { network: Network }) {
   }
 
   async function handleReport() {
-    await reportNetwork(network.id, 'reported from app');
-    setReported(true);
+    try {
+      await reportNetwork(network.id, 'reported from app');
+      setReported(true);
+    } catch {
+      /* offline / failed: leave the button active to retry */
+    }
   }
 
   return (

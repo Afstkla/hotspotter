@@ -34,7 +34,8 @@ export default function MapView({
             <Popup>
               <strong>{n.ssid}</strong>
               <br />
-              {n.type === 'password' ? n.password : n.type}
+              {n.venue_name ?? n.type}
+              {n.type === 'password' && <><br />🔒 open the list for the password</>}
             </Popup>
           </Marker>
         ) : null

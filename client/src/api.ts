@@ -74,9 +74,10 @@ export async function voteNetwork(id: number, works: boolean): Promise<Network> 
 }
 
 export async function reportNetwork(id: number, reason: string): Promise<void> {
-  await fetch(`${BASE}/networks/${id}/report`, {
+  const res = await fetch(`${BASE}/networks/${id}/report`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ reason }),
   });
+  if (!res.ok) throw new Error('Report failed');
 }
