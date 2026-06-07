@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Network } from '../api';
 import { voteNetwork, reportNetwork } from '../api';
+import { canConnect, connectToNetwork } from '../platform';
 
 const TYPE_LABEL: Record<Network['type'], string> = {
   open: 'open',
@@ -26,6 +27,16 @@ export default function NetworkCard({ network }: { network: Network }) {
   const [open, setOpen] = useState(false);
   const [score, setScore] = useState(network.score);
   const [reported, setReported] = useState(false);
+  const [connectState, setConnectState] = useState<'idle' | 'connecting' | 'connected' | 'failed'>('idle');
+
+  async function handleConnect() {
+    setConnectState('connecting');
+    const ok = await connectToNetwork(
+      network.ssid,
+      network.type === 'password' ? network.password ?? undefined : undefined
+    );
+    setConnectState(ok ? 'connected' : 'failed');
+  }
 
   async function handleVote(works: boolean) {
     try {
@@ -71,6 +82,20 @@ export default function NetworkCard({ network }: { network: Network }) {
           )}
           {network.type === 'open' && <div className="muted">Open network — no password.</div>}
           {network.notes && <p>{network.notes}</p>}
+
+          {canConnect && network.type !== 'captive' && (
+            <button
+              className="btn"
+              style={{ marginTop: '0.6rem', width: '100%' }}
+              onClick={handleConnect}
+              disabled={connectState === 'connecting' || connectState === 'connected'}
+            >
+              {connectState === 'connecting' && 'Connecting…'}
+              {connectState === 'connected' && '✓ Connected'}
+              {connectState === 'failed' && 'Failed — tap to retry'}
+              {connectState === 'idle' && '📶 Connect now'}
+            </button>
+          )}
 
           <div className="row" style={{ marginTop: '0.6rem' }}>
             <button className="btn secondary" onClick={() => handleVote(true)}>👍 Works</button>

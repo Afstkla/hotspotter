@@ -19,8 +19,9 @@ export default function AboutPage() {
       </p>
       <h2>Heads up</h2>
       <p className="muted">
-        The web app ranks WiFi by distance and lets you copy the password. Auto-connect and
-        "see what your phone can see" need a native app — coming later.
+        The web app ranks WiFi by distance and lets you copy the password. The iOS app adds
+        one-tap <strong>Connect</strong>. Listing the networks your phone can currently see is
+        Android-only — Apple doesn't allow it.
       </p>
     </div>
   );
