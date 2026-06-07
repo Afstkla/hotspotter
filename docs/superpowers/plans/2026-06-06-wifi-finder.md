@@ -804,7 +804,7 @@ import { createDb } from './db.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
-const PORT = process.env.PORT || 7743;
+const PORT = process.env.PORT || 7745;
 const DB_PATH = process.env.DB_PATH || path.join(ROOT, 'data', 'wifi.db');
 
 const db = createDb(DB_PATH);
@@ -821,7 +821,7 @@ app.listen(PORT, () => console.log(`wifi-finder listening on :${PORT}`));
 
 - [ ] **Step 2: Smoke test boot (no client build yet)**
 
-Run: `PORT=7743 node server/index.js &` then `sleep 1 && curl -s "http://localhost:7743/api/networks?lat=52&lon=4" && kill %1`
+Run: `PORT=7745 node server/index.js &` then `sleep 1 && curl -s "http://localhost:7745/api/networks?lat=52&lon=4" && kill %1`
 Expected: prints `[]` (empty array). Server boots; static block skipped since `client/dist` absent.
 
 - [ ] **Step 3: Commit**
@@ -902,7 +902,7 @@ git commit -m "feat: server bootstrap serving api and static client"
 - [ ] **Step 3: Create `client/vite.config.ts`**
 
 ```ts
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -942,7 +942,7 @@ export default defineConfig({
     }),
   ],
   server: {
-    proxy: { '/api': 'http://localhost:7743' },
+    proxy: { '/api': 'http://localhost:7745' },
   },
   test: {
     globals: true,
@@ -1824,14 +1824,14 @@ Expected: build succeeds.
 
 - [ ] **Step 2: Start the server**
 
-Run: `PORT=7743 node server/index.js &`
-Expected: logs `wifi-finder listening on :7743`.
+Run: `PORT=7745 node server/index.js &`
+Expected: logs `wifi-finder listening on :7745`.
 
 - [ ] **Step 3: Seed one network via API**
 
 Run:
 ```bash
-curl -s -X POST http://localhost:7743/api/networks \
+curl -s -X POST http://localhost:7745/api/networks \
   -H 'Content-Type: application/json' \
   -d '{"ssid":"DemoCafe","type":"password","password":"demo1234","venue_name":"Demo Cafe","locations":[{"lat":52.3731,"lon":4.8922}]}'
 ```
@@ -1839,12 +1839,12 @@ Expected: 201-style JSON with an `id` and `score: 0`.
 
 - [ ] **Step 4: Query nearby**
 
-Run: `curl -s "http://localhost:7743/api/networks?lat=52.3731&lon=4.8922&radius=1000"`
+Run: `curl -s "http://localhost:7745/api/networks?lat=52.3731&lon=4.8922&radius=1000"`
 Expected: array containing DemoCafe with `distance_m: 0`.
 
 - [ ] **Step 5: Load the UI in a browser**
 
-Open `http://localhost:7743/` — allow location (or use a desktop browser's location override near the seeded point). Confirm: the list shows DemoCafe, tapping reveals the password + copy button, vote buttons respond, and the Add page map accepts a tapped location. Then `kill %1`.
+Open `http://localhost:7745/` — allow location (or use a desktop browser's location override near the seeded point). Confirm: the list shows DemoCafe, tapping reveals the password + copy button, vote buttons respond, and the Add page map accepts a tapped location. Then `kill %1`.
 
 - [ ] **Step 6: Commit any fixes found during manual testing**
 
@@ -1869,14 +1869,14 @@ Decide public vs private with the user. Push the existing local repo.
 - [ ] **Step 2: Configure the VPS service**
 
 - pm2 process name: `wifi-finder`
-- Production port: `7743` (distinct from Recipe Vault's 7742)
+- Production port: `7745` (distinct from Recipe Vault's 7742)
 - Start command: `npm start` (runs `server/index.js`), with `DB_PATH` pointing at a persistent path on the VPS.
 - Ensure `client && npm run build` runs before pm2 (start/restart) so `client/dist` exists — same rebuild-before-restart rule as Recipe Vault.
 
 - [ ] **Step 3: nginx vhost + SSL**
 
 - Subdomain: `wifi.afstkla.nl`
-- Reverse proxy to `127.0.0.1:7743`.
+- Reverse proxy to `127.0.0.1:7745`.
 - SSL via certbot (the skill's standard flow).
 
 - [ ] **Step 4: GitHub Actions deploy on push to main**
