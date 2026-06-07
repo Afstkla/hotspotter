@@ -3,7 +3,7 @@ export default function AboutPage() {
     <div>
       <h1>About</h1>
       <p>
-        WiFi Finder is a community map of semi-public WiFi — cafés, hostels, co-working
+        Hotspotter is a community map of semi-public WiFi — cafés, hostels, co-working
         spots and other networks meant to be shared. Find what's near you, and add what
         you know.
       </p>

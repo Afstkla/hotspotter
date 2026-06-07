@@ -1,5 +1,5 @@
 {
-  "name": "wifi-finder-client",
+  "name": "hotspotter-client",
   "private": true,
   "type": "module",
   "scripts": {

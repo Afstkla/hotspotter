@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
-        name: 'WiFi Finder',
-        short_name: 'WiFi',
+        name: 'Hotspotter',
+        short_name: 'Hotspotter',
         description: 'Find shared WiFi near you',
         theme_color: '#0f172a',
         background_color: '#0f172a',
