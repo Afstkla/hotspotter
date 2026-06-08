@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { addNetwork, type NetworkType, type NetworkLocation } from '../api';
@@ -20,6 +20,16 @@ function Picker({ onPick }: { onPick: (lat: number, lon: number) => void }) {
       onPick(e.latlng.lat, e.latlng.lng);
     },
   });
+  return null;
+}
+
+// react-leaflet ignores `center` prop changes after mount, so pan imperatively
+// when a location is obtained.
+function Recenter({ lat, lon }: { lat: number; lon: number }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView([lat, lon], 16);
+  }, [lat, lon, map]);
   return null;
 }
 
@@ -117,12 +127,20 @@ export default function AddPage() {
       />
 
       <label>Location {point ? '(tap map to adjust)' : '(tap map to set)'}</label>
-      <button type="button" className="btn secondary" onClick={useMyLocation} style={{ marginBottom: '0.5rem' }}>
-        Use my location
+      <button
+        type="button"
+        className="btn secondary"
+        onClick={useMyLocation}
+        disabled={geo.loading}
+        style={{ marginBottom: '0.5rem' }}
+      >
+        {geo.loading ? 'Locating…' : 'Use my location'}
       </button>
+      {geo.error && <p className="muted" style={{ color: '#f87171' }}>{geo.error}</p>}
       <MapContainer center={center} zoom={16} style={{ height: '40vh', borderRadius: 12 }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
         <Picker onPick={(lat, lon) => setPoint({ lat, lon })} />
+        {geo.lat != null && geo.lon != null && <Recenter lat={geo.lat} lon={geo.lon} />}
         {point && <Marker position={[point.lat, point.lon]} icon={icon} />}
       </MapContainer>
 
